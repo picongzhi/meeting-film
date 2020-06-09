@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.film.persistence.dao.FilmMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.film.persistence.model.Film">
+        <id column="UUID" property="uuid"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="filmScore"/>
+        <result column="film_preSaleNum" property="filmPresalenum"/>
+        <result column="film_box_office" property="filmBoxOffice"/>
+        <result column="film_source" property="filmSource"/>
+        <result column="film_cats" property="filmCats"/>
+        <result column="film_area" property="filmArea"/>
+        <result column="film_date" property="filmDate"/>
+        <result column="film_time" property="filmTime"/>
+        <result column="film_status" property="filmStatus"/>
+    </resultMap>
+
+    <select id="getFilmDetailById" parameterType="java.lang.String"
+            resultType="com.stylefeng.guns.api.film.FilmDetailVO">
+        SELECT film.UUID                                                AS filmId,
+               film.film_name                                           AS filmName,
+               info.film_en_name                                        AS filmEnName,
+               film.img_address                                         AS imhAddress,
+               info.film_score                                          AS score,
+               info.film_score_num                                      AS scoreNum,
+               film.film_box_office                                     AS totalBox,
+               (SELECT GROUP_CONCAT(show_name SEPARATOR ',')
+                FROM cat_dict AS ct
+                WHERE FIND_IN_SET(ct.UUID, (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats), '#', ',')
+                                            FROM film t
+                                            WHERE t.UUID = film.UUID))) AS info1,
+               CONCAT((SELECT show_name FROM source_dict sd WHERE sd.UUID = film.film_source), ' / ', info.film_length,
+                      '分钟')                                             AS info2,
+               CONCAT(film.film_time, (SELECT show_name FROM source_dict sd WHERE sd.UUID = film.film_source),
+                      '上映')                                             AS info3
+        FROM film AS film,
+             film_info AS info
+        WHERE film.`UUID` = info.`film_id`
+          AND film.UUID = #{filmId}
+    </select>
+
+    <select id="getFilmDetailByName" parameterType="java.lang.String"
+            resultType="com.stylefeng.guns.api.film.FilmDetailVO">
+        SELECT film.UUID                                                AS filmId,
+               film.film_name                                           AS filmName,
+               info.film_en_name                                        AS filmEnName,
+               film.img_address                                         AS imhAddress,
+               info.film_score                                          AS score,
+               info.film_score_num                                      AS scoreNum,
+               film.film_box_office                                     AS totalBox,
+               (SELECT GROUP_CONCAT(show_name SEPARATOR ',')
+                FROM cat_dict AS ct
+                WHERE FIND_IN_SET(ct.UUID, (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats), '#', ',')
+                                            FROM film t
+                                            WHERE t.UUID = film.UUID))) AS info1,
+               CONCAT((SELECT show_name FROM source_dict sd WHERE sd.UUID = film.film_source), ' / ', info.film_length,
+                      '分钟')                                             AS info2,
+               CONCAT(film.film_time, (SELECT show_name FROM source_dict sd WHERE sd.UUID = film.film_source),
+                      '上映')                                             AS info3
+        FROM film AS film,
+             film_info AS info
+        WHERE film.`UUID` = info.`film_id`
+          AND film.film_name LIKE #{filmName}
+    </select>
+</mapper>
