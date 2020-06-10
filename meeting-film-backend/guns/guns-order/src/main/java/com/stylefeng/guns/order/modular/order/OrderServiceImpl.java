@@ -1,20 +1,29 @@
 package com.stylefeng.guns.order.modular.order;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.google.common.collect.Sets;
+import com.stylefeng.guns.api.cinema.CinemaService;
+import com.stylefeng.guns.api.cinema.FieldFilmVO;
+import com.stylefeng.guns.api.cinema.FilmInfoVO;
 import com.stylefeng.guns.api.order.OrderService;
 import com.stylefeng.guns.api.order.OrderVO;
+import com.stylefeng.guns.core.util.UUIDUtil;
 import com.stylefeng.guns.order.config.util.FTPUtil;
 import com.stylefeng.guns.order.persistence.dao.OrderMapper;
 import com.stylefeng.guns.order.persistence.model.Orders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Component
 @Service(interfaceClass = OrderService.class)
 public class OrderServiceImpl implements OrderService {
@@ -23,6 +32,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private FTPUtil ftpUtil;
+
+    @Reference(interfaceClass = CinemaService.class, check = false)
+    private CinemaService cinemaService;
 
     @Override
     public boolean isSeatExists(String fieldId, String seats) {
@@ -71,7 +83,36 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderVO saveOrder(Integer fieldId, String soldSeats, String seatsName, Integer userId) {
-        return null;
+        String uuid = UUIDUtil.genUuid();
+        FilmInfoVO filmInfoVO = cinemaService.getFilmInfoByFieldId(fieldId);
+
+        FieldFilmVO fieldFilmVO = cinemaService.getFieldFilmInfo(fieldId);
+        int count = soldSeats.split(",").length;
+        double totalPrice = getTotalPrice(count, Double.parseDouble(fieldFilmVO.getPrice()));
+
+        Orders orders = new Orders();
+        orders.setUuid(uuid);
+        orders.setSeatsName(seatsName);
+        orders.setSeatsIds(soldSeats);
+        orders.setOrderUser(userId);
+        orders.setOrderPrice(totalPrice);
+        orders.setFilmPrice(Double.parseDouble(fieldFilmVO.getPrice()));
+        orders.setFilmId(Integer.parseInt(filmInfoVO.getFilmId()));
+        orders.setFieldId(fieldId);
+        orders.setCinemaId(Integer.parseInt(fieldFilmVO.getCinemaId()));
+
+        int affected = orderMapper.insert(orders);
+        if (affected > 0) {
+            return null;
+        } else {
+            log.info("保存订单失败");
+            return null;
+        }
+    }
+
+    private double getTotalPrice(int count, double price) {
+        BigDecimal total = new BigDecimal(price).multiply(new BigDecimal(count));
+        return total.setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Override

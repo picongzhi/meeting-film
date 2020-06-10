@@ -68,4 +68,12 @@ public interface CinemaService {
      * @return
      */
     FilmInfoVO getFilmInfoByFieldId(int fieldId);
+
+    /**
+     * 根据场次id获取影院和票价
+     *
+     * @param fieldId
+     * @return
+     */
+    FieldFilmVO getFieldFilmInfo(int fieldId);
 }

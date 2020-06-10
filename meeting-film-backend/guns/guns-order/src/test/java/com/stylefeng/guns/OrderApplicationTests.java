@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderApplication.class)
-public class FilmApplicationTests {
+public class OrderApplicationTests {
     @Autowired
     private OrderService orderService;
 

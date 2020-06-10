@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.cinema.*;
 import com.stylefeng.guns.cinema.persistence.dao.*;
-import com.stylefeng.guns.cinema.persistence.model.AreaDict;
-import com.stylefeng.guns.cinema.persistence.model.BrandDict;
-import com.stylefeng.guns.cinema.persistence.model.Cinema;
-import com.stylefeng.guns.cinema.persistence.model.HallDict;
+import com.stylefeng.guns.cinema.persistence.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -167,5 +164,15 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public FilmInfoVO getFilmInfoByFieldId(int fieldId) {
         return fieldMapper.getFilmInfo(fieldId);
+    }
+
+    @Override
+    public FieldFilmVO getFieldFilmInfo(int fieldId) {
+        Field field = fieldMapper.selectById(fieldId);
+        FieldFilmVO fieldFilmVO = new FieldFilmVO();
+        fieldFilmVO.setCinemaId(String.valueOf(field.getCinemaId()));
+        fieldFilmVO.setPrice(String.valueOf(field.getPrice()));
+
+        return fieldFilmVO;
     }
 }
