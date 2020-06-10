@@ -3,7 +3,7 @@
 <mapper namespace="com.stylefeng.guns.order.persistence.dao.OrderMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.stylefeng.guns.order.persistence.model.Order">
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.order.persistence.model.Orders">
         <result column="UUID" property="uuid"/>
         <result column="cinema_id" property="cinemaId"/>
         <result column="field_id" property="fieldId"/>

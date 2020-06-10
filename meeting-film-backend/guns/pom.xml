@@ -49,6 +49,7 @@
         <jwt.version>0.9.0</jwt.version>
         <hutool.version>4.1.1</hutool.version>
         <lombok.version>1.18.8</lombok.version>
+        <guava.version>28.2-jre</guava.version>
     </properties>
 
     <dependencyManagement>
@@ -181,6 +182,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

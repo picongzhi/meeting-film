@@ -1,8 +1,10 @@
 package com.stylefeng.guns.order.persistence.model;
 
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+
 import java.io.Serializable;
 
 /**
@@ -13,7 +15,7 @@ import java.io.Serializable;
  * @author picongzhi
  * @since 2020-06-04
  */
-public class Order extends Model<Order> {
+public class Orders extends Model<Orders> {
 
     private static final long serialVersionUID = 1L;
 
@@ -170,17 +172,17 @@ public class Order extends Model<Order> {
     @Override
     public String toString() {
         return "Order{" +
-        "uuid=" + uuid +
-        ", cinemaId=" + cinemaId +
-        ", fieldId=" + fieldId +
-        ", filmId=" + filmId +
-        ", seatsIds=" + seatsIds +
-        ", seatsName=" + seatsName +
-        ", filmPrice=" + filmPrice +
-        ", orderPrice=" + orderPrice +
-        ", orderTime=" + orderTime +
-        ", orderUser=" + orderUser +
-        ", orderStatus=" + orderStatus +
-        "}";
+                "uuid=" + uuid +
+                ", cinemaId=" + cinemaId +
+                ", fieldId=" + fieldId +
+                ", filmId=" + filmId +
+                ", seatsIds=" + seatsIds +
+                ", seatsName=" + seatsName +
+                ", filmPrice=" + filmPrice +
+                ", orderPrice=" + orderPrice +
+                ", orderTime=" + orderTime +
+                ", orderUser=" + orderUser +
+                ", orderStatus=" + orderStatus +
+                "}";
     }
 }
