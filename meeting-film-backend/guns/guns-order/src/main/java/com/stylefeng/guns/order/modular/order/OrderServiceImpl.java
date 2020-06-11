@@ -103,7 +103,13 @@ public class OrderServiceImpl implements OrderService {
 
         int affected = orderMapper.insert(orders);
         if (affected > 0) {
-            return null;
+            OrderVO orderVO = orderMapper.getOrderInfoById(uuid);
+            if (orderVO == null) {
+                log.error("订单信息查询失败，订单编号为: {}", uuid);
+                return null;
+            } else {
+                return orderVO;
+            }
         } else {
             log.info("保存订单失败");
             return null;
@@ -117,7 +123,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderVO> getOrdersByUserId(Integer userId) {
-        return null;
+        if (userId == null) {
+            log.error("订单查询业务失败，用户编号为传入");
+            return null;
+        }
+
+        return orderMapper.getOrderInfosByUserId(userId);
     }
 
     @Override

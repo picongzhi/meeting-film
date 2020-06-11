@@ -1,8 +1,11 @@
 package com.stylefeng.guns.order.persistence.dao;
 
+import com.stylefeng.guns.api.order.OrderVO;
 import com.stylefeng.guns.order.persistence.model.Orders;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +17,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface OrderMapper extends BaseMapper<Orders> {
     String getSeatAddressByFieldId(@Param("fieldId") String fieldId);
+
+    OrderVO getOrderInfoById(@Param("fieldId") String orderId);
+
+    List<OrderVO> getOrderInfosByUserId(@Param("userId") Integer userId);
 }
