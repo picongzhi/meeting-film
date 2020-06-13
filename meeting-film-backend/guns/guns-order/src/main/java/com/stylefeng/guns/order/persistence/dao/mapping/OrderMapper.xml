@@ -64,4 +64,12 @@
           AND o.`film_id` = h.`film_id`
           AND o.`order_user` = #{userId}
     </select>
+
+    <select id="getSoldSeatsByFieldId"
+            parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT GROUP_CONCAT(`seats_ids`)
+        FROM `orders`
+        WHERE `field_id` = #{fieldId};
+    </select>
 </mapper>

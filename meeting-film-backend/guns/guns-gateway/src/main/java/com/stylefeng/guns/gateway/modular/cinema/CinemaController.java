@@ -3,6 +3,7 @@ package com.stylefeng.guns.gateway.modular.cinema;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.cinema.*;
+import com.stylefeng.guns.api.order.OrderService;
 import com.stylefeng.guns.gateway.modular.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -18,6 +19,9 @@ public class CinemaController {
 
     @Reference(interfaceClass = CinemaService.class, check = false)
     private CinemaService cinemaService;
+
+    @Reference(interfaceClass = OrderService.class, check = false)
+    private OrderService orderService;
 
     /**
      * 查询影院列表
@@ -105,6 +109,7 @@ public class CinemaController {
             CinemaInfoVO cinemaInfoVO = cinemaService.getCinemaInfoById(cinemaId);
             FilmInfoVO filmInfoVO = cinemaService.getFilmInfoByFieldId(fieldId);
             HallInfoVO hallInfoVO = cinemaService.getFilmFieldInfo(fieldId);
+            hallInfoVO.setSoldSeats(orderService.getSoldSeatsByFieldId(fieldId));
 
             CinemaFieldResponseVO cinemaFieldResponseVO = new CinemaFieldResponseVO();
             cinemaFieldResponseVO.setCinemaInfo(cinemaInfoVO);

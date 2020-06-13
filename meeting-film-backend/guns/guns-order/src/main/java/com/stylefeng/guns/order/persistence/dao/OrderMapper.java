@@ -21,4 +21,6 @@ public interface OrderMapper extends BaseMapper<Orders> {
     OrderVO getOrderInfoById(@Param("fieldId") String orderId);
 
     List<OrderVO> getOrderInfosByUserId(@Param("userId") Integer userId);
+
+    String getSoldSeatsByFieldId(@Param("fieldId") Integer fieldId);
 }

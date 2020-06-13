@@ -74,11 +74,11 @@ public class OrderServiceImpl implements OrderService {
         for (Orders order : orders) {
             Set<String> orderSeatSet = Sets.newHashSet(order.getSeatsIds().split(","));
             if (seatSet.stream().anyMatch(orderSeatSet::contains)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -133,6 +133,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String getSoldSeatsByFieldId(Integer fieldId) {
-        return null;
+        if (fieldId == null) {
+            log.error("查询已售座位错误，未传入任何场次编号");
+            return "";
+        }
+
+        return orderMapper.getSoldSeatsByFieldId(fieldId);
     }
 }
